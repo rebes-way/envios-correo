@@ -50,16 +50,9 @@ de por WhatsApp.
 
 ## Paso 3 — Publicar el sitio para mandarle el link a tus clientas
 
-```
-git init
-git add .
-git commit -m "Formulario de envíos"
-gh repo create envios-correo --public --source=. --push
-```
-
-(O crealo a mano en GitHub y hacé `git push`.) Después, en el repo de GitHub,
-andá a **Settings > Pages** y elegí como origen "GitHub Actions" — el sitio
-va a quedar en `https://<tu-usuario>.github.io/envios-correo/`.
+El sitio ya está publicado en **https://rebes-way.github.io/envios-correo/**
+(repo: [github.com/rebes-way/envios-correo](https://github.com/rebes-way/envios-correo)).
+Cada `git push` a `master` lo actualiza solo vía GitHub Actions.
 
 ## Actualizar la lista de sucursales
 

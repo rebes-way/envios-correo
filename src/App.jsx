@@ -40,9 +40,10 @@ export default function App() {
 
   const puedeEnviar = Boolean(
     form.nombre.trim() &&
+    form.telefono.trim() &&
     form.provincia &&
     (esDomicilio
-      ? form.localidad.trim() && form.direccion.trim()
+      ? form.localidad.trim() && form.direccion.trim() && form.cp.trim()
       : sucursal),
   )
 
@@ -164,13 +165,14 @@ export default function App() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tu WhatsApp (opcional)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Tu WhatsApp</label>
             <input
               type="tel"
               value={form.telefono}
               onChange={(e) => set('telefono', e.target.value)}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"
               placeholder="Ej: 11 2345-6789"
+              required
             />
           </div>
 
@@ -226,13 +228,14 @@ export default function App() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Código Postal (opcional)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Código Postal</label>
                 <input
                   type="text"
                   value={form.cp}
                   onChange={(e) => set('cp', e.target.value)}
                   className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"
                   placeholder="Ej: 1642"
+                  required
                 />
               </div>
             </>
@@ -271,7 +274,7 @@ export default function App() {
               onChange={(e) => set('nota', e.target.value)}
               rows={2}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 resize-none"
-              placeholder={esDomicilio ? 'Ej: dejar en portería' : 'Ej: horario en el que puedo retirar'}
+              placeholder={esDomicilio ? 'Ej: dejar en portería' : 'Ej: aclaración sobre tu pedido'}
             />
           </div>
 
