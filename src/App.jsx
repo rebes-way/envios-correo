@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Package, CheckCircle2, X } from 'lucide-react'
+import { CheckCircle2, X } from 'lucide-react'
 import SucursalAutocomplete from './components/SucursalAutocomplete'
 import { PROVINCIAS } from './lib/provincias'
 import { enviarPedido } from './lib/appsScript'
 import { WHATSAPP_NUMBER } from './config'
+import logo from './assets/logo.png'
 
 const nuevoForm = {
   nombre: '',
@@ -122,8 +123,9 @@ export default function App() {
 
   if (enviado) {
     return (
-      <div className="min-h-screen bg-rose-50 flex items-center justify-center px-4">
-        <div className="bg-white rounded-2xl shadow-sm p-8 max-w-sm w-full text-center">
+      <div className="min-h-screen bg-gradient-to-b from-rose-100 via-rose-50 to-white flex items-center justify-center px-4">
+        <div className="bg-white rounded-3xl shadow-xl ring-1 ring-rose-100 p-8 max-w-sm w-full text-center">
+          <img src={logo} alt="Rebe's Way" className="h-16 mx-auto mb-4 object-contain" />
           <CheckCircle2 className="mx-auto h-12 w-12 text-rose-500 mb-3" />
           <h1 className="text-lg font-semibold text-gray-800">¡Listo!</h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -141,17 +143,16 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-rose-50 px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-rose-100 via-rose-50 to-white px-4 py-10">
       <div className="max-w-md mx-auto">
-        <div className="flex items-center gap-2 mb-1">
-          <Package className="h-6 w-6 text-rose-500" />
-          <h1 className="text-xl font-semibold text-gray-800">Rebe's Way</h1>
+        <div className="flex flex-col items-center text-center mb-6">
+          <img src={logo} alt="Rebe's Way" className="h-24 sm:h-28 object-contain drop-shadow-sm" />
+          <p className="text-sm text-gray-500 mt-2">
+            Contame cómo querés recibir tu pedido y te confirmo por WhatsApp.
+          </p>
         </div>
-        <p className="text-sm text-gray-500 mb-6">
-          Contame cómo querés recibir tu pedido y te confirmo por WhatsApp.
-        </p>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm p-5 space-y-4">
+        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-xl ring-1 ring-rose-100 p-6 space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nombre y apellido</label>
             <input
