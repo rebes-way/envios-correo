@@ -148,7 +148,7 @@ export default function App() {
         <div className="flex flex-col items-center text-center mb-6">
           <img src={logo} alt="Rebe's Way" className="h-24 sm:h-28 object-contain drop-shadow-sm" />
           <p className="text-sm text-gray-500 mt-2">
-            Contame cómo querés recibir tu pedido y te confirmo por WhatsApp.
+            Un paso más para tu pedido ✨
           </p>
         </div>
 
