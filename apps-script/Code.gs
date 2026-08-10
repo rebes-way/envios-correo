@@ -25,27 +25,49 @@ function jsonOut(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+// El orden acá define el orden de las columnas en la hoja.
+var HEADERS = [
+  'Fecha',
+  'Nombre',
+  'Email',
+  'WhatsApp cliente',
+  'Tipo de entrega',
+  'Provincia',
+  'Localidad',
+  'Sucursal',
+  'Dirección sucursal',
+  'Código sucursal',
+  'Dirección domicilio',
+  'CP',
+  'Nota',
+];
+
 function guardarEnvio(data) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName('Envios');
   if (!sheet) {
     sheet = ss.insertSheet('Envios');
-    sheet.appendRow(['Fecha', 'Nombre', 'WhatsApp cliente', 'Provincia', 'Localidad', 'Sucursal', 'Dirección', 'Código sucursal', 'CP', 'Nota', 'Tipo de entrega']);
   }
-  // Nota: "Tipo de entrega" se agrega como última columna (K) para no
-  // desordenar planillas ya creadas antes de este cambio. Si tu planilla es
-  // vieja, agregá "Tipo de entrega" a mano en la celda K1.
-  sheet.appendRow([
-    new Date(),
-    data.nombre || '',
-    data.telefono || '',
-    data.provinciaNombre || '',
-    data.localidad || '',
-    data.sucursalNombre || '',
-    data.sucursalDireccion || '',
-    data.sucursalId || '',
-    data.cp || '',
-    data.nota || '',
-    data.tipoEntrega || '',
-  ]);
+
+  // Se asegura de que la fila de encabezados siempre tenga las columnas
+  // correctas, incluso en hojas viejas creadas antes de este cambio.
+  sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+
+  var fila = {
+    'Fecha': new Date(),
+    'Nombre': data.nombre || '',
+    'Email': data.email || '',
+    'WhatsApp cliente': data.telefono || '',
+    'Tipo de entrega': data.tipoEntrega || '',
+    'Provincia': data.provinciaNombre || '',
+    'Localidad': data.localidad || '',
+    'Sucursal': data.sucursalNombre || '',
+    'Dirección sucursal': data.direccionSucursal || '',
+    'Código sucursal': data.sucursalId || '',
+    'Dirección domicilio': data.direccionDomicilio || '',
+    'CP': data.cp || '',
+    'Nota': data.nota || '',
+  };
+
+  sheet.appendRow(HEADERS.map(function (h) { return fila[h]; }));
 }

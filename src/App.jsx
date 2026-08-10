@@ -8,7 +8,9 @@ import logo from './assets/logo.png'
 
 const nuevoForm = {
   nombre: '',
-  telefono: '',
+  email: '',
+  telAreaCode: '',
+  telCelular: '',
   provincia: '',
   tipoEntrega: 'sucursal', // 'sucursal' | 'domicilio'
   localidad: '',
@@ -41,19 +43,23 @@ export default function App() {
 
   const puedeEnviar = Boolean(
     form.nombre.trim() &&
-    form.telefono.trim() &&
+    form.telAreaCode.trim() &&
+    form.telCelular.trim() &&
     form.provincia &&
     (esDomicilio
       ? form.localidad.trim() && form.direccion.trim() && form.cp.trim()
       : sucursal),
   )
 
+  const telefonoCompleto = `${form.telAreaCode.trim()} ${form.telCelular.trim()}`.trim()
+
   const armarMensajeWhatsapp = () => {
     const lineas = [
       '¡Hola! Te paso los datos de mi envío 📦',
       '',
       `Nombre: ${form.nombre}`,
-      form.telefono ? `WhatsApp: ${form.telefono}` : null,
+      telefonoCompleto ? `WhatsApp: ${telefonoCompleto}` : null,
+      form.email ? `Email: ${form.email}` : null,
       '',
     ]
 
@@ -87,12 +93,14 @@ export default function App() {
     try {
       await enviarPedido({
         nombre: form.nombre,
-        telefono: form.telefono,
+        email: form.email,
+        telefono: telefonoCompleto,
         tipoEntrega: esDomicilio ? 'Domicilio' : 'Sucursal',
         provinciaNombre,
         localidad: esDomicilio ? form.localidad : sucursal.city_name,
         sucursalNombre: esDomicilio ? '' : sucursal.agency_name,
-        sucursalDireccion: esDomicilio ? form.direccion : (sucursal.street_full || ''),
+        direccionSucursal: esDomicilio ? '' : (sucursal.street_full || ''),
+        direccionDomicilio: esDomicilio ? form.direccion : '',
         sucursalId: esDomicilio ? '' : sucursal.agency_id,
         cp: esDomicilio ? form.cp : sucursal.zip_code,
         nota: form.nota,
@@ -166,15 +174,39 @@ export default function App() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tu WhatsApp</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Correo electrónico (opcional)</label>
             <input
-              type="tel"
-              value={form.telefono}
-              onChange={(e) => set('telefono', e.target.value)}
+              type="email"
+              value={form.email}
+              onChange={(e) => set('email', e.target.value)}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"
-              placeholder="Ej: 11 2345-6789"
-              required
+              placeholder="Ej: maria@email.com"
             />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Cód. de Área (sin 0)</label>
+              <input
+                type="tel"
+                value={form.telAreaCode}
+                onChange={(e) => set('telAreaCode', e.target.value)}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"
+                placeholder="Ej: 11"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Celular (sin 15)</label>
+              <input
+                type="tel"
+                value={form.telCelular}
+                onChange={(e) => set('telCelular', e.target.value)}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"
+                placeholder="Ej: 23456789"
+                required
+              />
+            </div>
           </div>
 
           <div>
