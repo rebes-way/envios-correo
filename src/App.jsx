@@ -307,7 +307,7 @@ export default function App() {
               onChange={(e) => set('nota', e.target.value)}
               rows={2}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 resize-none"
-              placeholder={esDomicilio ? 'Ej: dejar en portería' : 'Ej: aclaración sobre tu pedido'}
+              placeholder="Aclaración sobre tu pedido"
             />
           </div>
 
