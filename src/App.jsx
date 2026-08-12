@@ -43,6 +43,7 @@ export default function App() {
 
   const puedeEnviar = Boolean(
     form.nombre.trim() &&
+    form.email.trim() &&
     form.telAreaCode.trim() &&
     form.telCelular.trim() &&
     form.provincia &&
@@ -174,13 +175,14 @@ export default function App() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Correo electrónico (opcional)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
             <input
               type="email"
               value={form.email}
               onChange={(e) => set('email', e.target.value)}
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"
               placeholder="Ej: maria@email.com"
+              required
             />
           </div>
 
