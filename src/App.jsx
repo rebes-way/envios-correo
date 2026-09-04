@@ -98,13 +98,10 @@ export default function App() {
         telefono: telefonoCompleto,
         tipoEntrega: esDomicilio ? 'Domicilio' : 'Sucursal',
         provinciaNombre,
-        localidad: esDomicilio ? form.localidad : sucursal.city_name,
+        localidad: esDomicilio ? form.localidad : '',
         sucursalNombre: esDomicilio ? '' : sucursal.agency_name,
-        direccionSucursal: esDomicilio ? '' : (sucursal.street_full || ''),
-        direccionDomicilio: esDomicilio ? form.direccion : '',
-        sucursalId: esDomicilio ? '' : sucursal.agency_id,
-        cp: esDomicilio ? form.cp : sucursal.zip_code,
-        nota: form.nota,
+        direccion: esDomicilio ? form.direccion : '',
+        cp: esDomicilio ? form.cp : '',
       })
     } catch (err) {
       console.error('No se pudo guardar el envío', err)

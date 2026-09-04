@@ -25,21 +25,20 @@ function jsonOut(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// El orden acá define el orden de las columnas en la hoja.
+// El orden acá define el orden de las columnas en la hoja. Localidad y CP
+// solo se completan en envíos a domicilio; Sucursal solo en retiro en
+// sucursal (el resto queda vacío según corresponda).
 var HEADERS = [
   'Fecha',
-  'Nombre',
-  'Email',
-  'WhatsApp cliente',
   'Tipo de entrega',
+  'Nombre',
   'Provincia',
   'Localidad',
   'Sucursal',
-  'Dirección sucursal',
-  'Código sucursal',
-  'Dirección domicilio',
-  'CP',
-  'Nota',
+  'Dirección',
+  'Código Postal',
+  'Correo electrónico',
+  'Teléfono',
 ];
 
 function guardarEnvio(data) {
@@ -49,24 +48,24 @@ function guardarEnvio(data) {
     sheet = ss.insertSheet('Envios');
   }
 
-  // Se asegura de que la fila de encabezados siempre tenga las columnas
-  // correctas, incluso en hojas viejas creadas antes de este cambio.
+  // Se asegura de que la fila de encabezados siempre tenga exactamente las
+  // columnas correctas, incluso en hojas viejas creadas antes de este
+  // cambio (limpia cualquier encabezado viejo que haya sobrado a la derecha).
+  var lastCol = Math.max(sheet.getLastColumn(), HEADERS.length);
+  sheet.getRange(1, 1, 1, lastCol).clearContent();
   sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
 
   var fila = {
     'Fecha': new Date(),
-    'Nombre': data.nombre || '',
-    'Email': data.email || '',
-    'WhatsApp cliente': data.telefono || '',
     'Tipo de entrega': data.tipoEntrega || '',
+    'Nombre': data.nombre || '',
     'Provincia': data.provinciaNombre || '',
     'Localidad': data.localidad || '',
     'Sucursal': data.sucursalNombre || '',
-    'Dirección sucursal': data.direccionSucursal || '',
-    'Código sucursal': data.sucursalId || '',
-    'Dirección domicilio': data.direccionDomicilio || '',
-    'CP': data.cp || '',
-    'Nota': data.nota || '',
+    'Dirección': data.direccion || '',
+    'Código Postal': data.cp || '',
+    'Correo electrónico': data.email || '',
+    'Teléfono': data.telefono || '',
   };
 
   sheet.appendRow(HEADERS.map(function (h) { return fila[h]; }));
