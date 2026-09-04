@@ -95,7 +95,8 @@ export default function App() {
       await enviarPedido({
         nombre: form.nombre,
         email: form.email,
-        telefono: telefonoCompleto,
+        codArea: form.telAreaCode,
+        celular: form.telCelular,
         tipoEntrega: esDomicilio ? 'Domicilio' : 'Sucursal',
         provinciaNombre,
         localidad: esDomicilio ? form.localidad : '',

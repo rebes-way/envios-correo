@@ -38,7 +38,8 @@ var HEADERS = [
   'Dirección',
   'Código Postal',
   'Correo electrónico',
-  'Teléfono',
+  'Cód. de Área',
+  'Celular',
   'Nota',
 ];
 
@@ -66,7 +67,8 @@ function guardarEnvio(data) {
     'Dirección': data.direccion || '',
     'Código Postal': data.cp || '',
     'Correo electrónico': data.email || '',
-    'Teléfono': data.telefono || '',
+    'Cód. de Área': data.codArea || '',
+    'Celular': data.celular || '',
     'Nota': data.nota || '',
   };
 
