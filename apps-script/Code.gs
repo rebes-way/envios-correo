@@ -39,6 +39,7 @@ var HEADERS = [
   'Código Postal',
   'Correo electrónico',
   'Teléfono',
+  'Nota',
 ];
 
 function guardarEnvio(data) {
@@ -66,6 +67,7 @@ function guardarEnvio(data) {
     'Código Postal': data.cp || '',
     'Correo electrónico': data.email || '',
     'Teléfono': data.telefono || '',
+    'Nota': data.nota || '',
   };
 
   sheet.appendRow(HEADERS.map(function (h) { return fila[h]; }));

@@ -102,6 +102,7 @@ export default function App() {
         sucursalNombre: esDomicilio ? '' : sucursal.agency_name,
         direccion: esDomicilio ? form.direccion : '',
         cp: esDomicilio ? form.cp : '',
+        nota: form.nota,
       })
     } catch (err) {
       console.error('No se pudo guardar el envío', err)
