@@ -54,6 +54,20 @@ function notificarPedido(data) {
   }
 }
 
+// Para probar el aviso por mail: en el editor elegí "probarAviso" arriba y
+// apretá Ejecutar. La primera vez Google te pide autorizar el permiso.
+function probarAviso() {
+  notificarPedido({
+    tipoEntrega: 'Sucursal',
+    nombre: 'Prueba de aviso',
+    email: 'prueba@email.com',
+    codArea: '11',
+    celular: '12345678',
+    provinciaNombre: 'Ciudad Autónoma de Buenos Aires',
+    sucursalNombre: 'PALERMO',
+  });
+}
+
 function jsonOut(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
