@@ -13,9 +13,44 @@ function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
     guardarEnvio(data);
+    notificarPedido(data);
     return jsonOut({ ok: true });
   } catch (err) {
     return jsonOut({ ok: false, error: String(err) });
+  }
+}
+
+// Te manda un mail con el resumen de cada pedido nuevo (a la cuenta de Google
+// dueña de este script). Si el mail falla, el pedido igual queda guardado.
+function notificarPedido(data) {
+  try {
+    var destino = Session.getEffectiveUser().getEmail();
+    if (!destino) return;
+
+    var esDomicilio = data.tipoEntrega === 'Domicilio';
+    var lineas = [
+      'Tipo de entrega: ' + (data.tipoEntrega || ''),
+      'Nombre: ' + (data.nombre || ''),
+      'Correo: ' + (data.email || ''),
+      'Teléfono: ' + (data.codArea || '') + ' ' + (data.celular || ''),
+      'Provincia: ' + (data.provinciaNombre || ''),
+    ];
+    if (esDomicilio) {
+      lineas.push('Localidad: ' + (data.localidad || ''));
+      lineas.push('Dirección: ' + (data.direccion || ''));
+      lineas.push('Código Postal: ' + (data.cp || ''));
+    } else {
+      lineas.push('Sucursal: ' + (data.sucursalNombre || ''));
+    }
+    if (data.nota) lineas.push('Nota: ' + data.nota);
+
+    MailApp.sendEmail(
+      destino,
+      'Nuevo pedido: ' + (data.nombre || 'sin nombre') + ' (' + (data.tipoEntrega || '') + ')',
+      lineas.join('\n')
+    );
+  } catch (err) {
+    // no frenamos el guardado por un problema con el mail
   }
 }
 
