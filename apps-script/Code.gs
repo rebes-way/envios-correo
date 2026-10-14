@@ -13,7 +13,12 @@ function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
     guardarEnvio(data);
-    notificarPedido(data);
+    try {
+      notificarPedido(data);
+    } catch (errMail) {
+      // el pedido ya quedó guardado; el error del mail queda en Ejecuciones
+      console.error('No se pudo mandar el aviso por mail: ' + errMail);
+    }
     return jsonOut({ ok: true });
   } catch (err) {
     return jsonOut({ ok: false, error: String(err) });
@@ -21,37 +26,36 @@ function doPost(e) {
 }
 
 // Te manda un mail con el resumen de cada pedido nuevo (a la cuenta de Google
-// dueña de este script). Si el mail falla, el pedido igual queda guardado.
+// dueña de este script). Si falla, lanza el error para que se vea en el log.
 function notificarPedido(data) {
-  try {
-    var destino = Session.getEffectiveUser().getEmail();
-    if (!destino) return;
-
-    var esDomicilio = data.tipoEntrega === 'Domicilio';
-    var lineas = [
-      'Tipo de entrega: ' + (data.tipoEntrega || ''),
-      'Nombre: ' + (data.nombre || ''),
-      'Correo: ' + (data.email || ''),
-      'Teléfono: ' + (data.codArea || '') + ' ' + (data.celular || ''),
-      'Provincia: ' + (data.provinciaNombre || ''),
-    ];
-    if (esDomicilio) {
-      lineas.push('Localidad: ' + (data.localidad || ''));
-      lineas.push('Dirección: ' + (data.direccion || ''));
-      lineas.push('Código Postal: ' + (data.cp || ''));
-    } else {
-      lineas.push('Sucursal: ' + (data.sucursalNombre || ''));
-    }
-    if (data.nota) lineas.push('Nota: ' + data.nota);
-
-    MailApp.sendEmail(
-      destino,
-      'Nuevo pedido: ' + (data.nombre || 'sin nombre') + ' (' + (data.tipoEntrega || '') + ')',
-      lineas.join('\n')
-    );
-  } catch (err) {
-    // no frenamos el guardado por un problema con el mail
+  var destino = Session.getEffectiveUser().getEmail() || Session.getActiveUser().getEmail();
+  if (!destino) {
+    throw new Error('No pude averiguar a qué mail avisarte (Session devolvió vacío).');
   }
+
+  var esDomicilio = data.tipoEntrega === 'Domicilio';
+  var lineas = [
+    'Tipo de entrega: ' + (data.tipoEntrega || ''),
+    'Nombre: ' + (data.nombre || ''),
+    'Correo: ' + (data.email || ''),
+    'Teléfono: ' + (data.codArea || '') + ' ' + (data.celular || ''),
+    'Provincia: ' + (data.provinciaNombre || ''),
+  ];
+  if (esDomicilio) {
+    lineas.push('Localidad: ' + (data.localidad || ''));
+    lineas.push('Dirección: ' + (data.direccion || ''));
+    lineas.push('Código Postal: ' + (data.cp || ''));
+  } else {
+    lineas.push('Sucursal: ' + (data.sucursalNombre || ''));
+  }
+  if (data.nota) lineas.push('Nota: ' + data.nota);
+
+  MailApp.sendEmail(
+    destino,
+    'Nuevo pedido: ' + (data.nombre || 'sin nombre') + ' (' + (data.tipoEntrega || '') + ')',
+    lineas.join('\n')
+  );
+  console.log('Aviso enviado a ' + destino);
 }
 
 // Para probar el aviso por mail: en el editor elegí "probarAviso" arriba y
